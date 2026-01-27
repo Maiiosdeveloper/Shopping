@@ -14,16 +14,12 @@ class ProductCell: UICollectionViewCell {
     @IBOutlet weak var productImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var priceLabel: UILabel!
-    var imageTask: Task<Void, Never>?
     override func awakeFromNib() {
         super.awakeFromNib()
         setupUI()
-        contentView.translatesAutoresizingMaskIntoConstraints = false
     }
     override func prepareForReuse() {
         super.prepareForReuse()
-        imageTask?.cancel()
-        productImageView.image = nil
     }
     private func setupUI() {
         containerView.layer.cornerRadius = 12
@@ -39,36 +35,32 @@ class ProductCell: UICollectionViewCell {
         titleLabel.text = model.title
         priceLabel.text = model.price
         productImageView.image = model.image
-        //loadImage(from: model.imageURL)
         self.productImageView.alpha = 0
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: 0.2) {
             self.productImageView.alpha = 1
         }
-        switch layout {
-        case .list:
-            titleLabel.numberOfLines = 2
-        case .grid:
-            titleLabel.numberOfLines = 3
-        }
-        
         layoutIfNeeded()
     }
-    
-//    private func loadImage(from urlString: String) {
-//        guard let url = URL(string: urlString) else { return }
-//        imageTask?.cancel()
-//        imageTask = Task {
-//            do {
-//                let (data, _) = try await URLSession.shared.data(from: url)
-//                if Task.isCancelled { return }
-//                await MainActor.run {
-//                    self.productImageView.image = UIImage(data: data)
-//                }
-//            } catch {
-//                print("Image Error:", error)
-//            }
-//        }
-//    }
+    func showSkeleton() {
+        // Disable animation to avoid flicker
+        productImageView.image = nil
+        productImageView.backgroundColor = UIColor.systemGray5
+
+        titleLabel.text = ""
+        titleLabel.backgroundColor = UIColor.systemGray5
+        titleLabel.layer.cornerRadius = 4
+        titleLabel.clipsToBounds = true
+
+        priceLabel.text = ""
+        priceLabel.backgroundColor = UIColor.systemGray5
+        priceLabel.layer.cornerRadius = 4
+        priceLabel.clipsToBounds = true
+    }
+    func hideSkeleton() {
+        productImageView.backgroundColor = .clear
+        titleLabel.backgroundColor = .clear
+        priceLabel.backgroundColor = .clear
+    }
 }
 extension ProductCell: ProductCellProtocol {
     func displayCell(product: ProductItemViewModel, layout: LayoutMode) {

@@ -20,7 +20,7 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rl9-el-DRZ">
                         <rect key="frame" x="0.0" y="0.0" width="164" height="216"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bLV-FK-Em0">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="bLV-FK-Em0">
                                 <rect key="frame" x="8" y="8" width="148" height="150"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FEa-uE-7K4">
@@ -47,12 +47,13 @@
                             <constraint firstItem="hE8-rM-k6Z" firstAttribute="top" secondItem="FEa-uE-7K4" secondAttribute="bottom" constant="4" id="ebU-zn-rLa"/>
                             <constraint firstItem="bLV-FK-Em0" firstAttribute="leading" secondItem="rl9-el-DRZ" secondAttribute="leading" constant="8" id="kqh-Jn-x3b"/>
                             <constraint firstAttribute="trailing" secondItem="bLV-FK-Em0" secondAttribute="trailing" constant="8" id="ng2-2i-elf"/>
-                            <constraint firstAttribute="bottom" secondItem="hE8-rM-k6Z" secondAttribute="bottom" constant="9.6666666666666572" id="oHW-5a-Jbz"/>
+                            <constraint firstAttribute="bottom" secondItem="hE8-rM-k6Z" secondAttribute="bottom" constant="9.6699999999999999" id="oHW-5a-Jbz"/>
                         </constraints>
                     </view>
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="rl9-el-DRZ" firstAttribute="trailing" secondItem="gTV-IL-0wX" secondAttribute="trailing" id="C98-tI-RcU"/>
                 <constraint firstItem="rl9-el-DRZ" firstAttribute="bottom" secondItem="gTV-IL-0wX" secondAttribute="bottom" id="PMh-2j-E82"/>

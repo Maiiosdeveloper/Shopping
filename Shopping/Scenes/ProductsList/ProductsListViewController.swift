@@ -18,7 +18,8 @@ final class ProductsListViewController: UIViewController {
     private var layoutMode: LayoutMode = .list
     var interactor: ProductsListBusinessLogic?
     var router: ProductsListRoutingLogic?
-
+    var isSkeletonVisible = true
+    var skeletonCount = 6
     // MARK: View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,19 +61,23 @@ final class ProductsListViewController: UIViewController {
 }
 extension ProductsListViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return interactor?.count ?? 0
+        return isSkeletonVisible ? skeletonCount : interactor?.count ?? 0
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(
+        guard let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: "ProductCell",
                     for: indexPath
-                ) as? ProductCell
-        guard let cell else {
+        ) as? ProductCell else {
             return UICollectionViewCell()
         }
-        interactor?.configureCell(cell: cell, at: indexPath.row, layoutMode: layoutMode)
         
-                return cell
+        if isSkeletonVisible {
+                cell.showSkeleton()
+            } else {
+                cell.hideSkeleton()
+                interactor?.configureCell(cell: cell, at: indexPath.row, layoutMode: layoutMode)
+            }     
+        return cell
     }
 }
 extension ProductsListViewController: UICollectionViewDelegateFlowLayout {
@@ -107,6 +112,7 @@ extension ProductsListViewController: UIScrollViewDelegate {
 
 extension ProductsListViewController: ProductsListDisplayLogic {
     func reloadData()  {
+        isSkeletonVisible = false
         Task {
             await MainActor.run { [weak self] in
                 self?.collectionView.reloadData()

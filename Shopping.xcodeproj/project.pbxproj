@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C5DA7AE2F293E190007535C /* +UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5DA7AD2F293E190007535C /* +UIView.swift */; };
 		2CB53F022F268057009A7C90 /* HomeConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB53F012F268057009A7C90 /* HomeConfigurator.swift */; };
 		2CC4869A2F23DCB000FC7ACC /* ProductsListModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC486992F23DCB000FC7ACC /* ProductsListModels.swift */; };
 		2CC4869C2F23DD7A00FC7ACC /* ProductsListWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC4869B2F23DD7A00FC7ACC /* ProductsListWorker.swift */; };
@@ -55,6 +56,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2C5DA7AD2F293E190007535C /* +UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "+UIView.swift"; sourceTree = "<group>"; };
 		2CB53F012F268057009A7C90 /* HomeConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeConfigurator.swift; sourceTree = "<group>"; };
 		2CC486992F23DCB000FC7ACC /* ProductsListModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductsListModels.swift; sourceTree = "<group>"; };
 		2CC4869B2F23DD7A00FC7ACC /* ProductsListWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductsListWorker.swift; sourceTree = "<group>"; };
@@ -114,6 +116,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2C5DA7AC2F293DF20007535C /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				2C5DA7AD2F293E190007535C /* +UIView.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		2CB53F002F26802E009A7C90 /* Configurator */ = {
 			isa = PBXGroup;
 			children = (
@@ -213,6 +223,7 @@
 		2CE7FFDC2F22823D00F0DC77 /* Shopping */ = {
 			isa = PBXGroup;
 			children = (
+				2C5DA7AC2F293DF20007535C /* Extensions */,
 				2CB53F002F26802E009A7C90 /* Configurator */,
 				2CE700312F22A96E00F0DC77 /* Utilities */,
 				2CE7002E2F22A94300F0DC77 /* Cache */,
@@ -406,6 +417,7 @@
 				2CE700112F22874100F0DC77 /* Endpoint.swift in Sources */,
 				2CE7001B2F2289CF00F0DC77 /* ProductsListViewController.swift in Sources */,
 				2CE7002B2F22A92200F0DC77 /* ProductDetailsPresenter.swift in Sources */,
+				2C5DA7AE2F293E190007535C /* +UIView.swift in Sources */,
 				2CFA5D0B2F2543B80017F253 /* ProductCell.swift in Sources */,
 				2CE700142F22886000F0DC77 /* Product.swift in Sources */,
 				2CE7002D2F22A93200F0DC77 /* ProductDetailsRouter.swift in Sources */,

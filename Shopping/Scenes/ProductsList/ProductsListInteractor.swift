@@ -51,13 +51,8 @@ final class ProductsListInteractor {
                         // Load images in parallel using TaskGroup
                         await loadImagesForProducts([comingProducts.last!])
                     }
-                    
                 }
-                
-                //allProducts = comingProducts
-                
                 presenter?.reloadData()
-                
             } catch {
                 presenter?.presentError(error)
             }
