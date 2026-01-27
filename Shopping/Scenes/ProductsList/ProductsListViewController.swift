@@ -83,10 +83,28 @@ extension ProductsListViewController: UICollectionViewDelegateFlowLayout {
         }
     }
 }
+extension ProductsListViewController: UIScrollViewDelegate {
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        let frameHeight = scrollView.frame.size.height
+
+        let threshold: CGFloat = 100
+
+        if offsetY > contentHeight - frameHeight - threshold {
+            interactor?.loadMore()
+        }
+    }
+}
+
 extension ProductsListViewController: ProductsListDisplayLogic {
     func reloadData()  {
-        DispatchQueue.main.async{ [weak self] in
-            self?.collectionView.reloadData()
+        Task {
+            await MainActor.run { [weak self] in
+                self?.collectionView.reloadData()
+            }
         }
     }
     func displayLoading(_ isLoading: Bool) {
