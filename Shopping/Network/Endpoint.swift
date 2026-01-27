@@ -6,3 +6,13 @@
 //
 
 import Foundation
+enum Endpoint {
+    case products(limit: Int)
+
+    var url: URL {
+        switch self {
+        case .products(let limit):
+            return URL(string: "https://fakestoreapi.com/products?limit=\(limit)")!
+        }
+    }
+}
