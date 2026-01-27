@@ -70,13 +70,7 @@ extension ProductsListViewController: UICollectionViewDelegate, UICollectionView
         ) as? ProductCell else {
             return UICollectionViewCell()
         }
-        
-        if isSkeletonVisible {
-                cell.showSkeleton()
-            } else {
-                cell.hideSkeleton()
-                interactor?.configureCell(cell: cell, at: indexPath.row, layoutMode: layoutMode)
-            }     
+        isSkeletonVisible ? cell.showSkeleton() : interactor?.configureCell(cell: cell, at: indexPath.row, layoutMode: layoutMode)
         return cell
     }
 }

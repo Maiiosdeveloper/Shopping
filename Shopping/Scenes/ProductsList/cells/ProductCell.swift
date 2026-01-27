@@ -20,6 +20,7 @@ class ProductCell: UICollectionViewCell {
     }
     override func prepareForReuse() {
         super.prepareForReuse()
+        hideSkeleton()
     }
     private func setupUI() {
         containerView.layer.cornerRadius = 12
@@ -32,6 +33,7 @@ class ProductCell: UICollectionViewCell {
         productImageView.contentMode = .scaleAspectFit
     }
     private func configure(with model: ProductItemViewModel, layout: LayoutMode) {
+        hideSkeleton()
         titleLabel.text = model.title
         priceLabel.text = model.price
         productImageView.image = model.image
@@ -42,24 +44,29 @@ class ProductCell: UICollectionViewCell {
         layoutIfNeeded()
     }
     func showSkeleton() {
-        // Disable animation to avoid flicker
-        productImageView.image = nil
-        productImageView.backgroundColor = UIColor.systemGray5
+        // Clear previous content
+            productImageView.image = nil
+            titleLabel.text = ""
+            priceLabel.text = ""
 
-        titleLabel.text = ""
-        titleLabel.backgroundColor = UIColor.systemGray5
-        titleLabel.layer.cornerRadius = 4
-        titleLabel.clipsToBounds = true
+            // Set background colors
+            productImageView.backgroundColor = .systemGray5
+            titleLabel.backgroundColor = .systemGray5
+            priceLabel.backgroundColor = .systemGray5
 
-        priceLabel.text = ""
-        priceLabel.backgroundColor = UIColor.systemGray5
-        priceLabel.layer.cornerRadius = 4
-        priceLabel.clipsToBounds = true
+            // Start shimmer on each component
+            productImageView.startShimmer()
+            titleLabel.startShimmer()
+            priceLabel.startShimmer()
     }
-    func hideSkeleton() {
+    private func hideSkeleton() {
         productImageView.backgroundColor = .clear
-        titleLabel.backgroundColor = .clear
-        priceLabel.backgroundColor = .clear
+            titleLabel.backgroundColor = .clear
+            priceLabel.backgroundColor = .clear
+
+            productImageView.stopShimmer()
+            titleLabel.stopShimmer()
+            priceLabel.stopShimmer()
     }
 }
 extension ProductCell: ProductCellProtocol {
