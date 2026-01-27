@@ -135,6 +135,7 @@
 			isa = PBXGroup;
 			children = (
 				2CE700132F22886000F0DC77 /* Product.swift */,
+				2CC486992F23DCB000FC7ACC /* ProductsListModels.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -157,7 +158,6 @@
 				2CE7001D2F2289F800F0DC77 /* ProductsListInteractor.swift */,
 				2CE7001F2F228A0900F0DC77 /* ProductsListPresenter.swift */,
 				2CE700212F228A2A00F0DC77 /* ProductsListRouter.swift */,
-				2CC486992F23DCB000FC7ACC /* ProductsListModels.swift */,
 				2CC4869B2F23DD7A00FC7ACC /* ProductsListWorker.swift */,
 			);
 			path = ProductsList;

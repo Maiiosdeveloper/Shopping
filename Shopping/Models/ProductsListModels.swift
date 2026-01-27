@@ -5,14 +5,14 @@
 //  Created by Mai on 23/01/2026.
 //
 
-import Foundation
+import UIKit
 struct ProductItemViewModel {
     let title: String
     let price: String
-    let imageURL: String
-    init(product: Product) {
+    let image: UIImage?
+    init(product: Product, image: UIImage?) {
         self.title = product.title
         self.price = "$\(product.price)"
-        self.imageURL = product.image
+        self.image = image
     }
 }

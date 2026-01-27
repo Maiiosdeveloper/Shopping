@@ -33,10 +33,16 @@ final class ProductsListViewController: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         // spacing
-            let layout = UICollectionViewFlowLayout()
+            
+        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.estimatedItemSize = .zero
             layout.minimumLineSpacing = 12
             layout.minimumInteritemSpacing = 8
             collectionView.setCollectionViewLayout(layout, animated: false)
+        }
+        
+        collectionView.isPrefetchingEnabled = false
+
     }
     private func setupNavigationButton() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(
@@ -104,6 +110,7 @@ extension ProductsListViewController: ProductsListDisplayLogic {
         Task {
             await MainActor.run { [weak self] in
                 self?.collectionView.reloadData()
+                
             }
         }
     }

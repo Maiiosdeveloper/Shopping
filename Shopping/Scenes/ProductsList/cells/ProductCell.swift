@@ -14,10 +14,16 @@ class ProductCell: UICollectionViewCell {
     @IBOutlet weak var productImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var priceLabel: UILabel!
-    @IBOutlet weak var imageHeightConstraint: NSLayoutConstraint!
+    var imageTask: Task<Void, Never>?
     override func awakeFromNib() {
         super.awakeFromNib()
         setupUI()
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+    }
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imageTask?.cancel()
+        productImageView.image = nil
     }
     private func setupUI() {
         containerView.layer.cornerRadius = 12
@@ -32,33 +38,37 @@ class ProductCell: UICollectionViewCell {
     private func configure(with model: ProductItemViewModel, layout: LayoutMode) {
         titleLabel.text = model.title
         priceLabel.text = model.price
-        loadImage(from: model.imageURL)
-        
+        productImageView.image = model.image
+        //loadImage(from: model.imageURL)
+        self.productImageView.alpha = 0
+        UIView.animate(withDuration: 0.3) {
+            self.productImageView.alpha = 1
+        }
         switch layout {
         case .list:
-            //imageHeightConstraint.constant = 80
             titleLabel.numberOfLines = 2
         case .grid:
-            //imageHeightConstraint.constant = 150
             titleLabel.numberOfLines = 3
         }
         
         layoutIfNeeded()
     }
     
-    private func loadImage(from urlString: String) {
-        guard let url = URL(string: urlString) else { return }
-        Task {
-            do {
-                let (data, _) = try await URLSession.shared.data(from: url)
-                await MainActor.run {
-                    self.productImageView.image = UIImage(data: data)
-                }
-            } catch {
-                print("Image Error:", error)
-            }
-        }
-    }
+//    private func loadImage(from urlString: String) {
+//        guard let url = URL(string: urlString) else { return }
+//        imageTask?.cancel()
+//        imageTask = Task {
+//            do {
+//                let (data, _) = try await URLSession.shared.data(from: url)
+//                if Task.isCancelled { return }
+//                await MainActor.run {
+//                    self.productImageView.image = UIImage(data: data)
+//                }
+//            } catch {
+//                print("Image Error:", error)
+//            }
+//        }
+//    }
 }
 extension ProductCell: ProductCellProtocol {
     func displayCell(product: ProductItemViewModel, layout: LayoutMode) {
