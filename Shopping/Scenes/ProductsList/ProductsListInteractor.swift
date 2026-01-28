@@ -12,8 +12,11 @@ protocol ProductsListBusinessLogic {
     func viewDidLoad()
     func configureCell(cell: ProductCellProtocol,at index: Int, layoutMode: LayoutMode)
     func loadMore()
+    func didSelectItem(at index: Int)
 }
-
+protocol ProductsListDataStore {
+    var productViewModel: ProductItemViewModel? { get }
+}
 final class ProductsListInteractor {
     private let limit = 7
     private var presenter: ProductsListPresentationLogic?
@@ -28,6 +31,7 @@ final class ProductsListInteractor {
     private var comingProducts: [Product] = []
     private var imageCache: [Int: UIImage] = [:]
     private var isLastPage:Bool = false
+    var productViewModel: ProductItemViewModel?
     init(presenter: ProductsListPresentationLogic) {
         self.presenter = presenter
         currentLimit = limit
@@ -99,6 +103,11 @@ final class ProductsListInteractor {
     }
 }
 extension ProductsListInteractor: ProductsListBusinessLogic {
+    func didSelectItem(at index: Int) {
+        let selectedProduct = allProducts[index]
+        productViewModel = .init(product: selectedProduct, image: imageCache[selectedProduct.id])
+    }
+    
     func loadMore() {
         fetchMoreProductsIfNeeded()
     }
@@ -121,4 +130,6 @@ extension ProductsListInteractor: ProductsListBusinessLogic {
     
     
 }
+extension ProductsListInteractor: ProductsListDataStore {
 
+}

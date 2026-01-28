@@ -16,7 +16,7 @@ final class ProductsListViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     // MARK: @Variables
     private var layoutMode: LayoutMode = .list
-    var interactor: ProductsListBusinessLogic?
+    var interactor: (ProductsListBusinessLogic & ProductsListDataStore)?
     var router: ProductsListRoutingLogic?
     var isSkeletonVisible = true
     var skeletonCount = 6
@@ -73,6 +73,11 @@ extension ProductsListViewController: UICollectionViewDelegate, UICollectionView
         isSkeletonVisible ? cell.showSkeleton() : interactor?.configureCell(cell: cell, at: indexPath.row, layoutMode: layoutMode)
         return cell
     }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard !isSkeletonVisible else { return }
+        interactor?.didSelectItem(at: indexPath.row)
+        router?.routeToProductDetails()
+    }
 }
 extension ProductsListViewController: UICollectionViewDelegateFlowLayout {
 
@@ -120,8 +125,6 @@ extension ProductsListViewController: ProductsListDisplayLogic {
     func displayError(_ message: String) {
         
     }
-    
-    
 }
 enum LayoutMode {
     case list

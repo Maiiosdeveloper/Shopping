@@ -7,17 +7,26 @@
 
 import UIKit
 protocol ProductsListRoutingLogic {
-    func routeToProductDetails(product: Product)
+    func routeToProductDetails()
 }
+protocol ProductsListProductsListDataPassing {
+    var dataStore: ProductsListDataStore? { get }
+}
+
 final class ProductsListRouter {
     weak var viewController: ProductsListViewController?
+    var dataStore: ProductsListDataStore?
     init(viewController: ProductsListViewController?) {
         self.viewController = viewController
     }
 }
 extension ProductsListRouter: ProductsListRoutingLogic {
-    func routeToProductDetails(product: Product) {
-        
+    func routeToProductDetails() {
+        guard let product = dataStore?.productViewModel else { return }
+        viewController?.navigationController?.pushViewController(HomeConfigurator.productDetailsViewController(product: product), animated: true)
     }
+}
+extension ProductsListRouter: ProductsListProductsListDataPassing {
+    
 }
 

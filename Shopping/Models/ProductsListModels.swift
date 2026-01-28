@@ -9,10 +9,12 @@ import UIKit
 struct ProductItemViewModel {
     let title: String
     let price: String
+    let description: String
     let image: UIImage?
     init(product: Product, image: UIImage?) {
         self.title = product.title
         self.price = "$\(product.price)"
         self.image = image
+        self.description = product.description
     }
 }

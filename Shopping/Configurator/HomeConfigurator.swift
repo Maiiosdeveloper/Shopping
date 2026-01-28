@@ -12,8 +12,13 @@ enum HomeConfigurator {
         let presenter = ProductsListPresenter(view: viewCotroller)
         let interactor = ProductsListInteractor(presenter: presenter)
         let router = ProductsListRouter(viewController: viewCotroller)
+        router.dataStore = interactor
         viewCotroller.interactor = interactor
         viewCotroller.router = router
+        return viewCotroller
+    }
+    static func productDetailsViewController(product: ProductItemViewModel) -> ProductDetailsViewController {
+        let viewCotroller = ProductDetailsViewController(product: product)
         return viewCotroller
     }
 }
