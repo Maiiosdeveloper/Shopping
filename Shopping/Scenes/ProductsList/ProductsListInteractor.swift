@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import SwiftData
 protocol ProductsListBusinessLogic {
     var count: Int { get }
     func viewDidLoad()
@@ -17,6 +18,7 @@ protocol ProductsListBusinessLogic {
 protocol ProductsListDataStore {
     var productViewModel: ProductItemViewModel? { get }
 }
+
 final class ProductsListInteractor {
     private let limit = 7
     private var presenter: ProductsListPresentationLogic?
@@ -32,36 +34,40 @@ final class ProductsListInteractor {
     private var imageCache: [Int: UIImage] = [:]
     private var isLastPage:Bool = false
     var productViewModel: ProductItemViewModel?
+    
+    var context: ModelContext?
     init(presenter: ProductsListPresentationLogic) {
         self.presenter = presenter
         currentLimit = limit
     }
-    private func fetchProducts() {
+    private func fetchProducts() async {
         guard !isLoading else { return }
         isLoading = true
-        Task {
+//        Task {
             do {
                 comingProducts = try await worker.fetchProducts(limit: currentLimit)
-                // This workaround approach because the api doesn't contain offset or page for pagination
                 if comingProducts.count == allProducts.count {
                     isLastPage = true
                 }else {
-                    if comingProducts.count <= currentLimit {
-                        allProducts = comingProducts
-                        // Load images in parallel using TaskGroup
-                        await loadImagesForProducts(allProducts)
-                    }else {
-                        allProducts.append(contentsOf: [comingProducts.last!])
-                        // Load images in parallel using TaskGroup
-                        await loadImagesForProducts([comingProducts.last!])
-                    }
+                    // This workaround approach because the api doesn't contain offset or page for pagination
+                    let ids = Set(allProducts.map { $0.id })
+                    let missing = comingProducts.filter { !ids.contains($0.id) }
+                    allProducts.append(contentsOf: missing)
+                    // Load images in parallel using TaskGroup
+                    await loadImagesForProducts(missing)
+                    // save to cache
+                    saveToCache()
                 }
                 presenter?.reloadData()
             } catch {
-                presenter?.presentError(error)
+                print("❌ No network. Loading from cache...")
+                if allProducts.isEmpty {
+                    await loadFromCache()
+                }
+                
             }
             isLoading = false
-        }
+//        }
         
     }
     private func loadImagesForProducts(_ products: [Product]) async {
@@ -92,15 +98,64 @@ final class ProductsListInteractor {
             }
         }
     }
-
     // MARK: - Pagination
     private func fetchMoreProductsIfNeeded() {
         if !isLastPage {
             currentLimit += limit
-            fetchProducts()
+            Task {
+                await fetchProducts()
+            }
         }
         
     }
+}
+extension ProductsListInteractor {
+    private func saveToCache() {
+        guard let context else { return }
+
+        for p in allProducts {
+            let imgData = imageCache[p.id]?.pngData()
+
+            let cached = CachedProduct(
+                id: p.id,
+                title: p.title,
+                price: p.price,
+                desc: p.description, category: p.category,
+                imageData: imgData
+            )
+
+            context.insert(cached)
+        }
+
+        try? context.save()
+    }
+    private func loadFromCache() async {
+        guard let context else { return }
+
+        let cached = try? context.fetch(FetchDescriptor<CachedProduct>())
+
+        allProducts = cached?.map {
+            Product(
+                id: $0.id,
+                title: $0.title,
+                price: $0.price,
+                description: $0.desc, category: $0.category,
+                image: ""
+            )
+        } ?? []
+
+        // imageCache from SwiftData
+        cached?.forEach {
+            if let data = $0.imageData {
+                imageCache[$0.id] = UIImage(data: data)
+            }
+        }
+
+        presenter?.reloadData()
+
+    }
+
+
 }
 extension ProductsListInteractor: ProductsListBusinessLogic {
     func didSelectItem(at index: Int) {
@@ -121,7 +176,9 @@ extension ProductsListInteractor: ProductsListBusinessLogic {
     }
     
     func viewDidLoad() {
-        fetchProducts()
+        Task {
+            await fetchProducts()
+        }
     }
     
     var count: Int {

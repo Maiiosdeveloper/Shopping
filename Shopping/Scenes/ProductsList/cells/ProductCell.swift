@@ -37,10 +37,6 @@ class ProductCell: UICollectionViewCell {
         titleLabel.text = model.title
         priceLabel.text = model.price
         productImageView.image = model.image
-        self.productImageView.alpha = 0
-        UIView.animate(withDuration: 0.2) {
-            self.productImageView.alpha = 1
-        }
         layoutIfNeeded()
     }
     func showSkeleton() {

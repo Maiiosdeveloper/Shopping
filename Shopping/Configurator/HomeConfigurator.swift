@@ -6,13 +6,15 @@
 //
 
 import UIKit
+import SwiftData
 enum HomeConfigurator {
-    static func productsViewController() -> ProductsListViewController {
+    static func productsViewController(modelContext: ModelContext?) -> ProductsListViewController {
         let viewCotroller = ProductsListViewController()
         let presenter = ProductsListPresenter(view: viewCotroller)
         let interactor = ProductsListInteractor(presenter: presenter)
         let router = ProductsListRouter(viewController: viewCotroller)
         router.dataStore = interactor
+        interactor.context = modelContext
         viewCotroller.interactor = interactor
         viewCotroller.router = router
         return viewCotroller

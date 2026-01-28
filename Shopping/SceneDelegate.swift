@@ -6,16 +6,19 @@
 //
 
 import UIKit
+import SwiftData
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-
     var window: UIWindow?
+    var modelContainer: ModelContainer?
+
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
+        setupSwiftData()
         let window = UIWindow(windowScene: windowScene)
-        window.rootViewController = UINavigationController.init(rootViewController: HomeConfigurator.productsViewController())
+        window.rootViewController = UINavigationController.init(rootViewController: HomeConfigurator.productsViewController(modelContext: modelContainer?.mainContext))
         self.window = window
         window.makeKeyAndVisible()
         
@@ -51,4 +54,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
 }
-
+extension SceneDelegate {
+    private func setupSwiftData() {
+        // ⭐ Setup SwiftData
+            do {
+                let schema = Schema([CachedProduct.self])
+                let config = ModelConfiguration(schema: schema)
+                modelContainer = try ModelContainer(for: schema, configurations: [config])
+            } catch {
+                fatalError("❌ Failed to initialize SwiftData container: \(error)")
+            }
+    }
+}
